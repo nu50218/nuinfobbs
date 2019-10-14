@@ -1,0 +1,27 @@
+version: "2"
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    env_file: .env_db
+    environment:
+      - MYSQL_DATABASE=db
+    volumes:
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+      - ./db_data:/var/lib/mysql
+
+  crawler:
+    build: crawler
+    command: ./crawler
+    restart: always
+    env_file: .env_crawler
+    depends_on:
+      - db
+
+  app:
+    build: app
+    command: ./app
+    restart: always
+    env_file: .env_app
+    depends_on:
+      - db
