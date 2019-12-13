@@ -6,6 +6,7 @@ RUN go get "cloud.google.com/go/firestore"
 RUN go get "firebase.google.com/go"
 RUN go get "google.golang.org/api/iterator"
 RUN go get "github.com/nu50218/nuinfobbs/library/env"
+RUN go get "github.com/nu50218/nuinfobbs/library/jobutils"
 COPY src .
 RUN CGO_ENABLED=0 GOOS=linux go build -o app main.go
 
