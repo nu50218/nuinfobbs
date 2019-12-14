@@ -1,7 +1,10 @@
 # nuinfobbs
 
-名大情報学部掲示板（[@nuinfobbs](https://twitter.com/nuinfobbs)）を動かすやつ
-学部SlackとかLINEbotとかでも配信したい
+名大情報学部掲示板（[@nuinfobbs](https://twitter.com/nuinfobbs)）を動かすやつです。
+
+[LINEbot](https://t.co/nrWypfMgFb?amp=1)もつくりました。
+
+学部Slackとかでも配信したいです。
 
 ## 使い方
 
@@ -23,8 +26,12 @@ GCPで新規プロジェクトを作成して、コマンドラインで`gcloud`
 
 ### Cloud Runにデプロイ
 
+Cloud Runにデプロイします。
+
+#### 環境変数の設定
+
 WIP
 
 ### Cloud Schedulerの設定
 
-WIP
+Cloud Schedulerで定期的にCloud RunのURLを叩きます。
