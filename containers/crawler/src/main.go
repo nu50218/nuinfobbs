@@ -24,11 +24,11 @@ func do() {
 		log.Fatalln(err)
 	}
 
-	firestoreClient, err := jobutils.NewFirestoreClient(conf.GCPProjectID)
+	store, err := jobutils.NewFireStore(conf.GCPProjectID)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer firestoreClient.Close()
+	defer store.Close()
 
 	posts, err := crawl(conf.TargetURL)
 	if err != nil {
@@ -38,7 +38,7 @@ func do() {
 	for _, post := range posts {
 		for _, tag := range conf.JobTags {
 			job := jobutils.NewJob(post.Number, post.Title, post.URL, tag, conf.DefaultDone)
-			if err := jobutils.SubmitJobIfNotExist(firestoreClient, job); err != nil {
+			if err := store.SubmitJobIfNotExist(job); err != nil {
 				log.Fatalln(err)
 			}
 		}
