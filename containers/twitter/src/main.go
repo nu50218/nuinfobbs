@@ -24,7 +24,7 @@ type config struct {
 
 func do() {
 	conf := config{}
-	if err := env.Parse(conf); err != nil {
+	if err := env.Parse(&conf); err != nil {
 		log.Fatalln(err)
 	}
 
