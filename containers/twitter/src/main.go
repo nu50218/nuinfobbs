@@ -34,21 +34,21 @@ func do() {
 
 	client := twitter.NewClient(httpClient)
 
-	firestoreClient, err := jobutils.NewFirestoreClient(conf.GCPProjectID)
+	store, err := jobutils.NewFireStore(conf.GCPProjectID)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	defer firestoreClient.Close()
+	defer store.Close()
 
-	jobs, err := jobutils.GetWaitingJobsByTag(firestoreClient, conf.Tag)
+	jobs, err := store.GetWaitingJobsByTag(conf.Tag)
 	for _, job := range jobs {
 		if err := tweet(client, job.Post); err != nil {
 			log.Fatalln(err)
 		}
-		if err := jobutils.MakeJobDone(firestoreClient, job); err != nil {
+		if err := store.MakeJobDone(job); err != nil {
 			var succeeded bool
 			for i := 0; i < 10; i++ {
-				if err := jobutils.MakeJobDone(firestoreClient, job); err == nil {
+				if err := store.MakeJobDone(job); err == nil {
 					succeeded = true
 					break
 				}
