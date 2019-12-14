@@ -5,43 +5,42 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
+	"github.com/caarlos0/env"
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
-	"github.com/nu50218/nuinfobbs/library/env"
 	"github.com/nu50218/nuinfobbs/library/jobutils"
 )
 
-func tweet(client *twitter.Client, post *jobutils.Post) error {
-	status := strings.Join([]string{"-表題-", post.Title, "", "-URL-", post.URL}, "\n")
-	_, _, err := client.Statuses.Update(status, nil)
-	return err
+type config struct {
+	GCPProjectID          string `env:"GCP_PROJECT_ID"`
+	Tag                   string `env:"TAG"`
+	TwitterConsumerKey    string `env:"TWITTER_CONSUMER_KEY"`
+	TwitterConsumerSecret string `env:"TWITTER_CONSUMER_SECRET"`
+	TwitterAccessToken    string `env:"TWITTER_ACCESS_TOKEN"`
+	TwitterAccessSecret   string `env:"TWITTER_ACCESS_SECRET"`
 }
 
 func do() {
-	projectID := env.AssertAndGetEnv("GCP_PROJECT_ID")
-	tag := env.AssertAndGetEnv("TAG")
+	conf := config{}
+	if err := env.Parse(conf); err != nil {
+		log.Fatalln(err)
+	}
 
-	consumerKey := env.AssertAndGetEnv("TWITTER_CONSUMER_KEY")
-	consumerSecret := env.AssertAndGetEnv("TWITTER_CONSUMER_SECRET")
-	accessToken := env.AssertAndGetEnv("TWITTER_ACCESS_TOKEN")
-	accessSecret := env.AssertAndGetEnv("TWITTER_ACCESS_SECRET")
-
-	config := oauth1.NewConfig(consumerKey, consumerSecret)
-	token := oauth1.NewToken(accessToken, accessSecret)
+	config := oauth1.NewConfig(conf.TwitterConsumerKey, conf.TwitterConsumerSecret)
+	token := oauth1.NewToken(conf.TwitterAccessToken, conf.TwitterAccessSecret)
 	httpClient := config.Client(oauth1.NoContext, token)
 
 	client := twitter.NewClient(httpClient)
 
-	firestoreClient, err := jobutils.NewFirestoreClient(projectID)
+	firestoreClient, err := jobutils.NewFirestoreClient(conf.GCPProjectID)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer firestoreClient.Close()
 
-	jobs, err := jobutils.GetWaitingJobsByTag(firestoreClient, tag)
+	jobs, err := jobutils.GetWaitingJobsByTag(firestoreClient, conf.Tag)
 	for _, job := range jobs {
 		if err := tweet(client, job.Post); err != nil {
 			log.Fatalln(err)
@@ -68,9 +67,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	tag := env.AssertAndGetEnv("TAG")
-
-	log.Println("twitter", tag, "started.")
+	log.Println("twitter", "started.")
 
 	http.HandleFunc("/", handler)
 
