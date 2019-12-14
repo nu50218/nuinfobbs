@@ -1,43 +1,30 @@
 # nuinfobbs
 
 名大情報学部掲示板（[@nuinfobbs](https://twitter.com/nuinfobbs)）を動かすやつ
-
-## 説明
-
-イメージ3つが動いていて、**crawler**が掲示板をクロールして**db**に突っ込んでいって**app**が`tweeted=0`なものを監視してツイートする。
+学部SlackとかLINEbotとかでも配信したい
 
 ## 使い方
 
-### `env_file`を書く
+GCPのCloud RunとCloud Schedulerを使います。
 
-#### .env_app
+### 準備
 
-`MYSQL_ROOT_PASSWORD`は同じにします。
+GCPで新規プロジェクトを作成して、コマンドラインで`gcloud`が動くようにします。
 
-```sh
-MYSQL_ROOT_PASSWORD= # SQLのrootのパスワード
-INTERVAL= # DBを監視する間隔（秒）
-# twitter
-TWITTER_CONSUMER_KEY=
-TWITTER_CONSUMER_SECRET=
-TWITTER_ACCESS_TOKEN=
-TWITTER_ACCESS_SECRET=
-```
+### コンテナのビルド
 
-### .env_crawler
+`containers`ディレクトリの中のディレクトリ（`crawler`など）それぞれに対して、`Dockerfile`が存在する階層で
 
-```sh
-MYSQL_ROOT_PASSWORD= # SQLのrootのパスワード
-TARGET_URL= # 対象掲示板のURL
-INTERVAL= # 掲示板アクセスの間隔（秒）
-```
+`$ gcloud builds submit --config cloudbuild.yaml .`
 
-### .env_db
+を実行します。
 
-```sh
-MYSQL_ROOT_PASSWORD= # SQLのrootのパスワード
-```
+そうすると、Cloud BuildでビルドされてContainer Registryにpushされます。
 
-### docker-compose up する
+### Cloud Runにデプロイ
 
-`$ docker-compose up`
+WIP
+
+### Cloud Schedulerの設定
+
+WIP
