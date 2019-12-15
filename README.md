@@ -24,11 +24,27 @@ GCPで新規プロジェクトを作成して、コマンドラインで`gcloud`
 
 ### Cloud Runにデプロイ
 
-Cloud Runにデプロイします。
+Container Registryのイメージを、Cloud Runにデプロイします。最大1リクエストかつスケール数も最大１にしてください。
 
 #### 環境変数の設定
 
-WIP
+`containers/*/src/main.go`の`config`という構造体を見れば必要な環境変数がわかります。
+
+ひと目でわからなそうな環境変数だけ説明します。
+
+##### crawler
+
+| 環境変数 | 説明 |
+| -- | -- |
+| TARGET_URL | クロール対象の掲示板を開いたトップページのURL |
+| DEFAULT_DONE | 既に投稿を配信済みとしてDBに投げるかを書きます。(true/false) |
+| JOB_TAGS | 他のコンテナ向けのタグを`,`区切りで入力します。例）`twitter,slack,line` |
+
+##### crawler以外
+
+| 環境変数 | 説明 |
+| -- | -- |
+| TAG | タグを指定します。このタグに一致するポストでDoneがfalseのものを配信していきます。例）`twitter` |
 
 ### Cloud Schedulerの設定
 
