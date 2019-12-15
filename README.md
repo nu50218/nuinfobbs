@@ -1,10 +1,8 @@
 # nuinfobbs
 
-名大情報学部掲示板（[@nuinfobbs](https://twitter.com/nuinfobbs)）を動かすやつです。
+名古屋大学の情報学部の掲示板をクロールして、[Twitter](https://twitter.com/nuinfobbs))、[LINE](lin.ee/qqzeIFh)、Slackに更新情報を配信します。
 
-[LINEbot](lin.ee/qqzeIFh)もつくりました。
-
-学部Slackにも配信しています。
+`containers`のそれぞれが独立して動いています。
 
 ## 使い方
 
