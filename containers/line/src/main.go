@@ -60,7 +60,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Println("twitter", "started.")
+	log.Println("", "started.")
 
 	http.HandleFunc("/", handler)
 
