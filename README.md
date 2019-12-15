@@ -2,9 +2,9 @@
 
 名大情報学部掲示板（[@nuinfobbs](https://twitter.com/nuinfobbs)）を動かすやつです。
 
-[LINEbot](https://t.co/nrWypfMgFb?amp=1)もつくりました。
+[LINEbot](lin.ee/qqzeIFh)もつくりました。
 
-学部Slackとかでも配信したいです。
+学部Slackにも配信しています。
 
 ## 使い方
 
