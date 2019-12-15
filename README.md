@@ -1,6 +1,6 @@
 # nuinfobbs
 
-名古屋大学の情報学部の掲示板をクロールして、[Twitter](https://twitter.com/nuinfobbs))、[LINE](lin.ee/qqzeIFh)、Slackに更新情報を配信します。
+名古屋大学の情報学部の掲示板をクロールして、[Twitter](https://twitter.com/nuinfobbs)、[LINE](lin.ee/qqzeIFh)、Slackに更新情報を配信します。
 
 `containers`のそれぞれが独立して動いています。
 
