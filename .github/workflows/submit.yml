@@ -1,4 +1,4 @@
-name: CloudBuild
+name: Submit to Cloud Build
 on:
   push:
     branches:
