@@ -4,6 +4,9 @@ on:
     branches:
       - 'master'
 
+env:
+  CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT }}
+
 jobs:
   submit:
     name: Submit
