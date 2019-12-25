@@ -1,0 +1,21 @@
+name: CloudBuild
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  submit:
+    name: Submit job
+    runs-on: ubuntu-latest
+    - uses: actions/checkout@v1
+- uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+  with:
+      version: '273.0.0'
+      service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+      service_account_key: ${{ secrets.GCP_SA_KEY }}
+- run: |
+    for dir in $(ls containers); do
+    gcloud builds submit containers/$dir --async --config=containers/$dir/cloudbuild.yaml
+    done
+  shell: sh
