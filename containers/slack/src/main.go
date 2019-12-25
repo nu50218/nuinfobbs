@@ -8,15 +8,15 @@ import (
 	"time"
 
 	"github.com/caarlos0/env"
-	"github.com/line/line-bot-sdk-go/linebot"
+	"github.com/nlopes/slack"
 	"github.com/nu50218/nuinfobbs/library/jobutils"
 )
 
 type config struct {
-	GCPProjectID           string `env:"GCP_PROJECT_ID"`
-	Tag                    string `env:"TAG"`
-	LineChannelSecret      string `env:"TWITTER_CHANNEL_SECRET"`
-	LineChannelAccessToken string `env:"TWITTER_CHANNEL_ACCESS_TOKEN"`
+	GCPProjectID   string `env:"GCP_PROJECT_ID"`
+	Tag            string `env:"TAG"`
+	SlackToken     string `env:"SLACK_TOKEN"`
+	SlackChannelID string `env:"SLACK_CHANNEL_ID"`
 }
 
 func do() {
@@ -25,7 +25,7 @@ func do() {
 		log.Fatalln(err)
 	}
 
-	bot, err := linebot.New(conf.LineChannelSecret, conf.LineChannelAccessToken)
+	client := slack.New(conf.SlackToken)
 
 	store, err := jobutils.NewFireStore(conf.GCPProjectID)
 	if err != nil {
@@ -35,7 +35,7 @@ func do() {
 
 	jobs, err := store.GetWaitingJobsByTag(conf.Tag)
 	for _, job := range jobs {
-		if err := push(bot, job.Post); err != nil {
+		if err := post(client, conf.SlackChannelID, job.Post); err != nil {
 			log.Fatalln(err)
 		}
 		if err := store.MakeJobDone(job); err != nil {
@@ -60,7 +60,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Println("", "started.")
+	log.Println("slack", "started.")
 
 	http.HandleFunc("/", handler)
 
