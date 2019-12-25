@@ -2,4 +2,9 @@ module github.com/nu50218/nuinfobbs/containers/crawler/src
 
 go 1.13
 
-require github.com/nu50218/nuinfobbs v0.0.0-20191225104604-86980380bf53 // indirect
+require (
+	github.com/PuerkitoBio/goquery v1.5.0
+	github.com/caarlos0/env v3.5.0+incompatible
+	github.com/nu50218/nuinfobbs/library/jobutils v0.0.0-20191225141017-ef23c4673a6e
+	github.com/stretchr/testify v1.4.0 // indirect
+)
