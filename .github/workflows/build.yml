@@ -13,4 +13,4 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Build ${{ matrix.dir }}
-      uses: docker build containers/${{ matrix.dir }} --file containers/${{ matrix.dir }}/Dockerfile
+      run: docker build containers/${{ matrix.dir }} --file containers/${{ matrix.dir }}/Dockerfile
