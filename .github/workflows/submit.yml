@@ -23,8 +23,5 @@ jobs:
 
       - run: |
           for dir in $(ls containers); do
-            git diff --exit-code --quiet HEAD^
-            if [[ $? -eq 1 ]]; then
-              gcloud builds submit containers/$dir --async --config=containers/$dir/cloudbuild.yaml
-            fi
+            git diff --exit-code --quiet HEAD^ --relative=containers/$dir || gcloud builds submit containers/$dir --async --config=containers/$dir/cloudbuild.yaml
           done
