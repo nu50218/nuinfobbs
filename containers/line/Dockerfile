@@ -9,7 +9,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o app *.go
 
 FROM alpine:3.10
 RUN apk add --no-cache ca-certificates
-COPY --from=build /src app
+COPY --from=build /src/app app
 
 CMD [ "./app" ]
 
