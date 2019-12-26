@@ -64,8 +64,8 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/line/line-bot-sdk-go v6.4.0+incompatible h1:j+yTHWjSo7ew9fVDjDsoP0gnr4iEAoaEFzlQhdQoxoQ=
-github.com/line/line-bot-sdk-go v6.4.0+incompatible/go.mod h1:0RjLjJEAU/3GIcHkC3av6O4jInAbt25nnZVmOFUgDBg=
+github.com/line/line-bot-sdk-go v6.4.1-0.20191208002921-42fa4600ac24+incompatible h1:TU0kBovMgKlycL/EScC3KmaqgrGS6wB2WlsmOTzVyZ0=
+github.com/line/line-bot-sdk-go v6.4.1-0.20191208002921-42fa4600ac24+incompatible/go.mod h1:0RjLjJEAU/3GIcHkC3av6O4jInAbt25nnZVmOFUgDBg=
 github.com/nu50218/nuinfobbs/library/jobutils v0.0.0-20191225141017-ef23c4673a6e h1:7ji6wqRTRPgbuv53sNvlzxHRIJKh2b/VeEMSJfvGiUs=
 github.com/nu50218/nuinfobbs/library/jobutils v0.0.0-20191225141017-ef23c4673a6e/go.mod h1:ISz8sEWqC6GD73R/YWHQ52cdjHuJHm6kRCri1011fwI=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
