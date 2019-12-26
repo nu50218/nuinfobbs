@@ -2,7 +2,7 @@ name: Submit to Cloud Build
 on:
   push:
     branches:
-      - 'master'
+      - "master"
 
 env:
   CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT }}
@@ -12,17 +12,19 @@ jobs:
     name: Submit
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
 
-    - name: Checkout
-      uses: actions/checkout@v1
-
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      with:
-          version: '273.0.0'
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: "273.0.0"
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
 
-    - run: |
-        for dir in $(ls containers); do
-        gcloud builds submit containers/$dir --async --config=containers/$dir/cloudbuild.yaml
-        done
+      - run: |
+          for dir in $(ls containers); do
+            git diff --exit-code --quiet HEAD^
+            if [[ $? -eq 1 ]]; then
+              gcloud builds submit containers/$dir --async --config=containers/$dir/cloudbuild.yaml
+            fi
+          done
