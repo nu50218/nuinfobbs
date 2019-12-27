@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
-	"os"
 	"time"
 
 	"github.com/caarlos0/env"
@@ -22,7 +19,7 @@ type config struct {
 	LineChannelAccessToken string `env:"TWITTER_CHANNEL_ACCESS_TOKEN"`
 }
 
-func do() {
+func main() {
 	conf := config{}
 	if err := env.Parse(&conf); err != nil {
 		log.Fatalln(err)
@@ -90,21 +87,4 @@ func do() {
 		log.Fatalln(err)
 	}
 
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	do()
-}
-
-func main() {
-	log.Println("", "started.")
-
-	http.HandleFunc("/", handler)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }

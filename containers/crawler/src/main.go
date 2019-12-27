@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
-	"os"
 
 	"github.com/caarlos0/env"
 	"github.com/nu50218/nuinfobbs/library/jobutils"
@@ -18,7 +15,7 @@ type config struct {
 	JobTags      []string `env:"JOB_TAGS" envSeparetor:","`
 }
 
-func do() {
+func main() {
 	conf := config{}
 	if err := env.Parse(&conf); err != nil {
 		log.Fatalln(err)
@@ -43,21 +40,4 @@ func do() {
 			}
 		}
 	}
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	do()
-}
-
-func main() {
-	log.Println("crawler", "started.")
-
-	http.HandleFunc("/", handler)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
