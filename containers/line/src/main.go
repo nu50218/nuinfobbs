@@ -34,8 +34,14 @@ func main() {
 	defer store.Close()
 
 	jobs, err := store.GetWaitingJobsByTag(conf.Tag)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	if len(jobs) == 0 {
+		return
+	}
 
-	followers, err := bot.GetNumberFollowers(time.Now().In(time.FixedZone("Asia/Tokyo", 9*60*60)).Format("2006-01-02")).Do()
+	followers, err := bot.GetNumberFollowers(time.Now().In(time.FixedZone("Asia/Tokyo", 9*60*60)).Format("20060102")).Do()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -49,7 +55,9 @@ func main() {
 	}
 
 	// いくつかまとめて配信することでリミットを超えないようにしたい
-	if int64(len(jobs))*int64(followers.Followers) > monthlyMessageLimit {
+	// 月間の投稿数は50個と仮定
+	// 1000 < 予想月間投稿数 ＝ 50/len(jobs)*友達の数ならやめる
+	if monthlyMessageLimit*int64(len(jobs)) < int64(50)*followers.Followers {
 		return
 	}
 
