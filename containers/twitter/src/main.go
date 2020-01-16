@@ -38,6 +38,9 @@ func main() {
 	defer store.Close()
 
 	jobs, err := store.GetWaitingJobsByTag(conf.Tag)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	for _, job := range jobs {
 		if err := tweet(client, job.Post); err != nil {
 			log.Fatalln(err)
