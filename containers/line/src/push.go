@@ -8,7 +8,7 @@ import (
 )
 
 func push(client *linebot.Client, posts []*jobutils.Post) error {
-	messages := make([]string, len(posts))
+	messages := make([]string, 0, len(posts))
 	for _, post := range posts {
 		messages = append(messages, strings.Join([]string{post.Title, post.URL}, "\n"))
 	}
