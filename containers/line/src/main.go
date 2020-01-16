@@ -26,6 +26,9 @@ func main() {
 	}
 
 	bot, err := linebot.New(conf.LineChannelSecret, conf.LineChannelAccessToken)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	store, err := jobutils.NewFireStore(conf.GCPProjectID)
 	if err != nil {
