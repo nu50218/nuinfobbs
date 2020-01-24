@@ -76,7 +76,8 @@ func main() {
 
 	var eg errgroup.Group
 
-	for _, job := range jobs {
+	for i := range jobs {
+		job := jobs[i]
 		eg.Go(func() error {
 			if err := store.MakeJobDone(job); err != nil {
 				var succeeded bool
