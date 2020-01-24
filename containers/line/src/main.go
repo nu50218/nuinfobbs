@@ -15,8 +15,8 @@ const monthlyMessageLimit = 1000
 type config struct {
 	GCPProjectID           string `env:"GCP_PROJECT_ID"`
 	Tag                    string `env:"TAG"`
-	LineChannelSecret      string `env:"TWITTER_CHANNEL_SECRET"`
-	LineChannelAccessToken string `env:"TWITTER_CHANNEL_ACCESS_TOKEN"`
+	LineChannelSecret      string `env:"LINE_CHANNEL_SECRET"`
+	LineChannelAccessToken string `env:"LINE_CHANNEL_ACCESS_TOKEN"`
 }
 
 func main() {
