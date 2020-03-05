@@ -12,7 +12,5 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: copy go.mod
-      run: cp go.mod containers/${{ matrix.dir }}/Dockerfile
     - name: Build ${{ matrix.dir }}
       run: docker build containers/${{ matrix.dir }} --file containers/${{ matrix.dir }}/Dockerfile
