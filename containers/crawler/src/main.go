@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/tls"
 	"log"
+	"net/http"
 
 	"github.com/caarlos0/env"
 	"github.com/nu50218/nuinfobbs/library/jobutils"
@@ -27,6 +29,7 @@ func main() {
 	}
 	defer store.Close()
 
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	posts, err := crawl(conf.TargetURL)
 	if err != nil {
 		log.Fatalln(err)
