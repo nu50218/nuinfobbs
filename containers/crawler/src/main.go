@@ -52,7 +52,7 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			submittedNewPost = submittedNewPost || true
+			submittedNewPost = submittedNewPost || ok
 		}
 	}
 
