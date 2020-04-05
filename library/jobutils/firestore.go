@@ -64,19 +64,22 @@ func (f *fireStore) MakeJobDone(job *Job) error {
 	return err
 }
 
-func (f *fireStore) SubmitJobIfNotExist(job *Job) error {
+func (f *fireStore) SubmitJobIfNotExist(job *Job) (bool, error) {
 	snapShot, err := f.client.Collection(path.Join("jobs", "tags", job.Tag)).Doc(strconv.Itoa(job.Post.Number)).Get(context.Background())
 	if err != nil && grpc.Code(err) != codes.NotFound {
-		return err
+		return false, err
 	}
 	if snapShot.Exists() {
-		return nil
+		return false, nil
 	}
 	_, err = f.client.Doc((path.Join("jobs", "tags", job.Tag, strconv.Itoa(job.Post.Number)))).Set(
 		context.Background(),
 		job,
 	)
-	return err
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 func (f *fireStore) Close() error {

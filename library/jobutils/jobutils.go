@@ -27,6 +27,6 @@ type Post struct {
 type Store interface {
 	GetWaitingJobsByTag(string) ([]*Job, error)
 	MakeJobDone(job *Job) error
-	SubmitJobIfNotExist(job *Job) error
+	SubmitJobIfNotExist(job *Job) (bool, error)
 	Close() error
 }

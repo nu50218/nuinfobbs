@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"log"
 	"net/http"
 
+	"cloud.google.com/go/pubsub"
 	"github.com/caarlos0/env"
 	"github.com/nu50218/nuinfobbs/library/jobutils"
 )
@@ -15,6 +17,7 @@ type config struct {
 	TargetURL    string   `env:"TARGET_URL"`
 	DefaultDone  bool     `env:"DEFAULT_DONE"`
 	JobTags      []string `env:"JOB_TAGS" envSeparetor:","`
+	Topic        string   `env:"GCP_PUBSUB_TOPIC"`
 }
 
 func main() {
@@ -29,18 +32,36 @@ func main() {
 	}
 	defer store.Close()
 
+	pubsubClient, err := pubsub.NewClient(context.Background(), conf.GCPProjectID)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	posts, err := crawl(conf.TargetURL)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
+	submittedNewPost := false
+
 	for _, post := range posts {
 		for _, tag := range conf.JobTags {
 			job := jobutils.NewJob(post.Number, post.Title, post.URL, tag, conf.DefaultDone)
-			if err := store.SubmitJobIfNotExist(job); err != nil {
+			ok, err := store.SubmitJobIfNotExist(job)
+			if err != nil {
 				log.Fatalln(err)
 			}
+			submittedNewPost = submittedNewPost || true
 		}
+	}
+
+	if submittedNewPost {
+		pubsubClient.Topic(conf.Topic).Publish(
+			context.Background(),
+			&pubsub.Message{
+				Data: []byte("unused_data"),
+			},
+		)
 	}
 }
