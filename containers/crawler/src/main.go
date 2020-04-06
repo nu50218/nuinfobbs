@@ -57,11 +57,13 @@ func main() {
 	}
 
 	if submittedNewPost {
-		pubsubClient.Topic(conf.Topic).Publish(
+		if _, err := pubsubClient.Topic(conf.Topic).Publish(
 			context.Background(),
 			&pubsub.Message{
 				Data: []byte("unused_data"),
 			},
-		)
+		).Get(context.Background()); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
