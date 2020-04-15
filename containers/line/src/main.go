@@ -44,9 +44,13 @@ func main() {
 		return
 	}
 
-	followers, err := bot.GetNumberFollowers(time.Now().In(time.FixedZone("Asia/Tokyo", 9*60*60)).Format("20060102")).Do()
+	// 集計は翌日中に終わるらしいので、2日前で取得
+	followers, err := bot.GetNumberFollowers(time.Now().Add(48 * time.Hour).In(time.FixedZone("Asia/Tokyo", 9*60*60)).Format("20060102")).Do()
 	if err != nil {
 		log.Fatalln(err)
+	}
+	if followers.Status != "ready" {
+		log.Fatalln("followers.Status is not ready")
 	}
 
 	messageConsumption, err := bot.GetMessageConsumption().Do()
@@ -58,9 +62,9 @@ func main() {
 	}
 
 	// いくつかまとめて配信することでリミットを超えないようにしたい
-	// 月間の投稿数は50個と仮定
-	// 1000 < 予想月間投稿数 ＝ 50/len(jobs)*友達の数ならやめる
-	if monthlyMessageLimit*int64(len(jobs)) < int64(50)*followers.Followers {
+	// 月間の投稿数は最大80個程度と仮定
+	// 1000 < 予想月間投稿数 ＝ 180/len(jobs)*友達の数ならやめる
+	if monthlyMessageLimit*int64(len(jobs)) < int64(80)*followers.Followers {
 		return
 	}
 
