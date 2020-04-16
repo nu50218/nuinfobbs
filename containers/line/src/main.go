@@ -22,40 +22,47 @@ type config struct {
 func main() {
 	conf := config{}
 	if err := env.Parse(&conf); err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 
 	bot, err := linebot.New(conf.LineChannelSecret, conf.LineChannelAccessToken)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 
 	store, err := jobutils.NewFireStore(conf.GCPProjectID)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 	defer store.Close()
 
 	jobs, err := store.GetWaitingJobsByTag(conf.Tag)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 	if len(jobs) == 0 {
 		return
 	}
 
 	// 集計は翌日中に終わるらしいので、2日前で取得
-	followers, err := bot.GetNumberFollowers(time.Now().Add(48 * time.Hour).In(time.FixedZone("Asia/Tokyo", 9*60*60)).Format("20060102")).Do()
+	followers, err := bot.GetNumberFollowers(time.Now().Add(-48 * time.Hour).In(time.FixedZone("Asia/Tokyo", 9*60*60)).Format("20060102")).Do()
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 	if followers.Status != "ready" {
-		log.Fatalln("followers.Status is not ready")
+		log.Println("followers.Status is not ready")
+		return
 	}
 
 	messageConsumption, err := bot.GetMessageConsumption().Do()
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 	if messageConsumption.TotalUsage+followers.Followers > monthlyMessageLimit {
 		return
@@ -100,7 +107,8 @@ func main() {
 	}
 
 	if err := eg.Wait(); err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 
 }
