@@ -2,11 +2,13 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/caarlos0/env"
-	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
+
+	"github.com/g8rswimmer/go-twitter/v2"
 	"github.com/nu50218/nuinfobbs/library/jobutils"
 )
 
@@ -19,6 +21,13 @@ type config struct {
 	TwitterAccessSecret   string `env:"TWITTER_ACCESS_SECRET"`
 }
 
+type authorizor struct {
+}
+
+func (a authorizor) Add(req *http.Request) {
+	return
+}
+
 func main() {
 	conf := config{}
 	if err := env.Parse(&conf); err != nil {
@@ -29,7 +38,11 @@ func main() {
 	token := oauth1.NewToken(conf.TwitterAccessToken, conf.TwitterAccessSecret)
 	httpClient := config.Client(oauth1.NoContext, token)
 
-	client := twitter.NewClient(httpClient)
+	client := &twitter.Client{
+		Authorizer: authorizor{},
+		Client:     httpClient,
+		Host:       "https://api.twitter.com",
+	}
 
 	store, err := jobutils.NewFireStore(conf.GCPProjectID)
 	if err != nil {
